@@ -10,7 +10,7 @@
     },
     "scripts": {
         "autoload": "cd wp-content/plugins/alertopet && composer dump-autoload",
-        "reactivate-plugin": "wp plugin deactivate alertopet && wp plugin activate alertopet"
+        "reactivate-plugin": "wp plugin deactivate aop && wp plugin activate aop"
     },
     "repositories":[
         {
