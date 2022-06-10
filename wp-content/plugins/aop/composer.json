@@ -1,0 +1,17 @@
+{
+    "name": "boson/aop",
+    "description": "Plugin WordPress pour le projet alertO'pet",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "aop\\": "."
+        }
+    },
+    "authors": [
+        {
+            "name": "Boson",
+            "email": "Aupif@toto.io"
+        }
+    ],
+    "require": {}
+}
