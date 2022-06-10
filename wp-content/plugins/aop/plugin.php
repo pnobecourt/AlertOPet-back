@@ -2,7 +2,7 @@
 
 namespace aop;
 
-use aop\PostType\SpeciesPostType;
+use aop\PostType\PetPostType;
 use aop\Taxonomy\SpeciesTaxonomy;
 
 class Plugin {
@@ -50,7 +50,7 @@ class Plugin {
     static public function onInit()
     {
         // start CPT declaration
-        SpeciesPostType::register();
+        PetPostType::register();
         // start Taxonomy declaration
         SpeciesTaxonomy::register();
     }
@@ -86,7 +86,7 @@ class Plugin {
     static public function onPluginActivation()
     {
         // associate the custom cap of our CPT and CT with the admin
-        SpeciesPostType::addCaps();
+        PetPostType::addCaps();
         SpeciesTaxonomy::addCaps();
     }
     
@@ -99,7 +99,7 @@ class Plugin {
     static public function onPluginDeactivation()
     {
         // Dissociate the custom caps of our CPT and CT from the admin
-        SpeciesPostType::removeCaps();
+        PetPostType::removeCaps();
         SpeciesTaxonomy::removeCaps();
     }
 }
