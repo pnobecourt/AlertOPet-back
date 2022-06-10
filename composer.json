@@ -1,0 +1,25 @@
+{
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "johnpbloch/wordpress-core-installer": true
+        }
+    },
+    "require": {
+        "johnpbloch/wordpress": "6.0"
+    },
+    "scripts": {
+        "autoload": "cd wp-content/plugins/alertopet && composer dump-autoload",
+        "reactivate-plugin": "wp plugin deactivate alertopet && wp plugin activate alertopet"
+    },
+    "repositories":[
+        {
+            "type":"composer",
+            "url":"https://wpackagist.org",
+            "only": [
+                "wpackagist-plugin/*",
+                "wpackagist-theme/*"
+            ]
+        }
+    ]
+}
