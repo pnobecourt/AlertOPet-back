@@ -9,7 +9,7 @@
         "johnpbloch/wordpress": "6.0"
     },
     "scripts": {
-        "autoload": "cd wp-content/plugins/alertopet && composer dump-autoload",
+        "autoload": "cd wp-content/plugins/aop && composer dump-autoload",
         "reactivate-plugin": "wp plugin deactivate aop && wp plugin activate aop"
     },
     "repositories":[

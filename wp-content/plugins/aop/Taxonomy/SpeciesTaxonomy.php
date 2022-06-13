@@ -2,7 +2,7 @@
 
 namespace aop\Taxonomy;
 
-use oCooking\PostType\PetPostType;
+use aop\PostType\PetPostType;
 
 class SpeciesTaxonomy extends Taxonomy {
 
