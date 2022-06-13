@@ -6,7 +6,8 @@
         }
     },
     "require": {
-        "johnpbloch/wordpress": "6.0"
+        "johnpbloch/wordpress": "6.0",
+        "wpackagist-plugin/fakerpress": "^0.5.3"
     },
     "scripts": {
         "autoload": "cd wp-content/plugins/aop && composer dump-autoload",
