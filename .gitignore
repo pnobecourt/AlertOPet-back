@@ -1,6 +1,8 @@
 vendor
 wordpress
 wp-config.php
+wp-config.dev.php
+wp-config.prod.php
 
 /wp-content/*
 !/wp-content
