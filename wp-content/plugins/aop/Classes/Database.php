@@ -27,7 +27,7 @@ class Database {
         // developer_id => post de cpt developer
         // technology_id => term de la taxo technology
         // grade => note (niveau de maîtrise)
-        $sql = "
+        /* $sql = "
             CREATE TABLE IF NOT EXISTS `{$tableName}` (
                 `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `breed` VARCHAR(100) UNSIGNED,
@@ -39,8 +39,23 @@ class Database {
                 `weight` BIGINT(20) UNSIGNED,
                 `identification`
                 `description` 
-                PRIMARY KEY(`species_id`)
+                FOREIGN KEY(`species_id`) REFERENCES `{$wpdb->prefix}terms`(`term_id`)
             ) {$charsetCollate};
+        "; */
+        $sql = "
+        CREATE TABLE `{$tableName}` (
+            `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `breed` varchar(100) NULL,
+            `name` varchar(100) NULL,
+            `birth_date` date NULL,
+            `color` varchar(100) NULL,
+            `size` float NULL,
+            `weight` float NULL,
+            `identification` varchar(100) NULL,
+            `description` longtext NULL,
+            `owner_id` bigint(20) unsigned NOT NULL,
+            FOREIGN KEY (`owner_id`) REFERENCES `{$wpdb->prefix}users` (`ID`) ON DELETE SET NULL
+          ) COLLATE '{$charsetCollate}';
         ";
 
         // on utlise l'objet wpdb pour faire la requête
@@ -53,19 +68,19 @@ class Database {
         global $wpdb;
 
         // définir le nom de la table custom, on n'oublie pas d'utiliser le préfixe défini dans wp_config pour dynamiser le nom de la table
-        $tableName = $wpdb->prefix . 'developer_technology';
+        $tableName = $wpdb->prefix . 'pets';
 
         $wpdb->query('DROP TABLE IF EXISTS ' . $tableName);
     }
 
 
-    static public function getTechnologiesByDeveloperId($developerPostId)
+    static public function getSpeciesId($developerPostId)
     {
         // on récupère l'objet wpdb qui permet d'interagir avec la BDD dans WP.
         global $wpdb;
 
         // on recompose le nom de la table en utilisant le préfixe
-        $tableName = $wpdb->prefix . 'developer_technology';
+        $tableName = $wpdb->prefix . 'pets';
 
         // réaliser la requête en bdd pour récupérer la liste des technologies associées au développeur $developerPostId
         // on utilise la syntaxe sprintf() qui permet de définir des zones variables dans une chaîne => %d sera un integer
