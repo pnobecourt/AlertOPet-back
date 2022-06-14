@@ -43,4 +43,36 @@ class PetPostType extends PostType {
             'delete_others_pets' => false,
         ]
     ];
-}
+
+    static public function addCustomFields()
+    {
+        /* add_post_type_support(
+            'pets',
+            'custom-fields',
+            array(
+                'breed' => '',
+                'name' => '',
+                'birth_date' => '',
+                'color' => '',
+                'size' => '',
+                'weight' => '',
+                'identification' => '',
+                'description' => '',
+            )
+        ); */
+        add_post_type_support(
+            'pets',
+            'custom-fields',
+            [
+                'breed' => 'breed',
+                'name' => 'name',
+                'birth_date' => 'birth_date',
+                'color' => 'color',
+                'size' => 'size',
+                'weight' => 'weight',
+                'identification' => 'identification',
+                'description' => 'description'
+            ]
+        );
+    }
+}   

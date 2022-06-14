@@ -4,7 +4,7 @@ namespace aop\Classes;
 
 use aop\Taxonomy\SpeciesTaxonomy;
 
-class Database {
+class PetDb {
 
 /**
      * generateTables
@@ -73,8 +73,7 @@ class Database {
         $wpdb->query('DROP TABLE IF EXISTS ' . $tableName);
     }
 
-
-    static public function getSpeciesId($developerPostId)
+    static public function getSpecies($speciesId)
     {
         // on récupère l'objet wpdb qui permet d'interagir avec la BDD dans WP.
         global $wpdb;
@@ -84,10 +83,10 @@ class Database {
 
         // réaliser la requête en bdd pour récupérer la liste des technologies associées au développeur $developerPostId
         // on utilise la syntaxe sprintf() qui permet de définir des zones variables dans une chaîne => %d sera un integer
-        $sql = "SELECT * FROM `{$tableName}` WHERE developer_id=%d";
+        $sql = "SELECT * FROM `{$tableName}` WHERE species_id=%d";
 
         // on utilise wpdb:->prepare() pour préparer notre requête SQL et lui fournir les arguments à utiliser
-        $preparedQuery = $wpdb->prepare($sql, [$developerPostId]);
+        $preparedQuery = $wpdb->prepare($sql, [$speciesId]);
 
         // exécution de la requête
         // on récupère le résultat sous la forme d'un array associatif
@@ -97,17 +96,16 @@ class Database {
         // on retourne un array qui contient pour chaque technologie
         // - l'objet WP_Term 
         // - le niveau de maîtrise (int)
-        $technologyList = [];
+        $speciesList = [];
         foreach ($relationList as $relation) {
-            $technology = [
-                'term' => get_term($relation['technology_id'], TechnologyTaxonomy::TAXONOMY_KEY),
-                'grade' => $relation['grade']
+            $species = [
+                'term' => get_term($relation['species_id'], SpeciesTaxonomy::TAXONOMY_KEY),
             ];
 
-            $technologyList[$technology['term']->slug] = $technology;
+            $speciesList[$species['term']->slug] = $species;
         }
         
-        return $technologyList;
+        return $speciesList;
     }
 
     /**
@@ -150,5 +148,14 @@ class Database {
         $wpdb->insert($tableName, ['technology_id' => $technologyId, 'grade' => $grade, 'developer_id' => $developerPostId]);
     }
 
+    /**
+     * I don't know what this function does
+     *
+     * @param [type] $developerPostId
+     * @return void
+     */
+    static public function addPostOnCreatePet()
+    {
 
+    }
 }

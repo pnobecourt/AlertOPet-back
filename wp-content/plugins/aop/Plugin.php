@@ -4,6 +4,7 @@ namespace aop;
 
 use aop\PostType\PetPostType;
 use aop\Taxonomy\SpeciesTaxonomy;
+use aop\Classes\PetDb;
 
 class Plugin {
     /**
@@ -28,6 +29,8 @@ class Plugin {
             AOP_PLUGIN_FILE,
             [self::class, 'onPluginDeactivation']
         );
+
+        //add_action( 'save_post', PetDb::addPostOnCreatePet );
     }
 
     /**
@@ -51,6 +54,7 @@ class Plugin {
     {
         // start CPT declaration
         PetPostType::register();
+        PetPostType::addCustomFields();
         // start Taxonomy declaration
         SpeciesTaxonomy::register();
     }
