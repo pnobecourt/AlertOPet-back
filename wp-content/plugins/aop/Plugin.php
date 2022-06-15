@@ -6,6 +6,7 @@ use aop\PostType\PetPostType;
 use aop\Taxonomy\SpeciesTaxonomy;
 use aop\Classes\PetDb;
 use aop\Api\UserRegister;
+use aop\Api\Pet;
 
 class Plugin {
     /**
@@ -58,6 +59,8 @@ class Plugin {
 
         return array_unique(array_merge($endpoints, $your_endpoints));
         });
+
+        Pet::run();
     }
 
     /**

@@ -139,7 +139,7 @@ class PetDb {
      * @param [type] $developerPostId
      * @return void
      */
-    static public function addPostOnCreatePet()
+    static public function addPet() //array ou liste d'arguments
     {
 
     }
