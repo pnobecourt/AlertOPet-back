@@ -5,6 +5,7 @@ namespace aop;
 use aop\PostType\PetPostType;
 use aop\Taxonomy\SpeciesTaxonomy;
 use aop\Classes\PetDb;
+use aop\Api\UserRegister;
 
 class Plugin {
     /**
@@ -18,7 +19,7 @@ class Plugin {
         
         add_action('init', [self::class, 'onInit']);
 
-        //! use this with api - add_action( 'rest_api_init', [self::class, 'onRestInit']);
+        add_action( 'rest_api_init', [self::class, 'onRestInit']);
 
         register_activation_hook(
             AOP_PLUGIN_FILE,
@@ -46,12 +47,12 @@ class Plugin {
      */
     static public function preInit()
     {
-        //! this function will be used for the api
         // actions to perform before the WP init hook
         // on gère la whitelist pour le plugin jwt-auth
         // on veut return un array qui contient toutes les routes à ne PAS protéger
         add_filter('jwt_auth_whitelist', function ($endpoints) {
             $your_endpoints = [
+                '/wp-json/jwt-auth/v1/token',
                 '/wp-json/aop/v1/user',
             ];
 
@@ -81,7 +82,11 @@ class Plugin {
      */
     static public function onRestInit()
     {
-        //! this function will be used for the api
+        remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
+        add_filter( 'rest_pre_serve_request', [self::class, 'setupCors']);
+
+        // ajouter la route custom pour enregistrer un utilisateur
+        UserRegister::initRoute();
     }
 
     /**
@@ -92,7 +97,6 @@ class Plugin {
      */
     static public function setupCors()
     {
-        //! this function will be used for the api
         header( 'Access-Control-Allow-Origin: *' );
     }
 
