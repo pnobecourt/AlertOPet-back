@@ -14,7 +14,7 @@ class Plugin {
      */
     static public function run()
     {
-        //! Use this with api - self::preInit();
+        self::preInit();
         
         add_action('init', [self::class, 'onInit']);
 
@@ -47,6 +47,16 @@ class Plugin {
     static public function preInit()
     {
         //! this function will be used for the api
+        // actions to perform before the WP init hook
+        // on gère la whitelist pour le plugin jwt-auth
+        // on veut return un array qui contient toutes les routes à ne PAS protéger
+        add_filter('jwt_auth_whitelist', function ($endpoints) {
+            $your_endpoints = [
+                '/wp-json/aop/v1/user',
+            ];
+
+        return array_unique(array_merge($endpoints, $your_endpoints));
+        });
     }
 
     /**
