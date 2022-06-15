@@ -39,7 +39,7 @@ class PetDb {
             `post_id` bigint(20) unsigned DEFAULT 0,
             FOREIGN KEY (`owner_id`) REFERENCES `{$wpdb->prefix}users`(`ID`),
             FOREIGN KEY (`post_id`) REFERENCES `{$wpdb->prefix}posts`(`ID`)
-          ) COLLATE '{$charsetCollate}';
+        );
         ";
         
 
@@ -66,7 +66,7 @@ class PetDb {
         // on recompose le nom de la table en utilisant le préfixe
         $tableName = $wpdb->prefix . 'pets';
 
-        // réaliser la requête en bdd pour récupérer la liste des technologies associées au développeur $developerPostId
+        // réaliser la requête en bdd pour récupérer la liste des animaux
         // on utilise la syntaxe sprintf() qui permet de définir des zones variables dans une chaîne => %d sera un integer
         $sql = "SELECT * FROM `{$tableName}` WHERE species_id=%d";
 
@@ -78,7 +78,7 @@ class PetDb {
         $relationList = $wpdb->get_results($preparedQuery, ARRAY_A);
         
         
-        // on retourne un array qui contient pour chaque technologie
+        // on retourne un array qui contient pour chaque animale
         // - l'objet WP_Term 
         // - le niveau de maîtrise (int)
         $speciesList = [];
