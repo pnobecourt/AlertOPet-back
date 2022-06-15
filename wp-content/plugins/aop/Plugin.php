@@ -22,6 +22,8 @@ class Plugin {
 
         add_action( 'rest_api_init', [self::class, 'onRestInit']);
 
+        add_action( 'save_post_pet', PetDb::addPet(), 10, 3 );
+
         register_activation_hook(
             AOP_PLUGIN_FILE,
             [self::class, 'onPluginActivation']
@@ -37,7 +39,6 @@ class Plugin {
             [self::class, 'onPluginUninstall']
         );
 
-        //add_action( 'save_post', PetDb::addPostOnCreatePet );
     }
 
     /**
