@@ -4,6 +4,7 @@ namespace aop;
 
 use aop\PostType\PetPostType;
 use aop\Taxonomy\SpeciesTaxonomy;
+use aop\Classes\PetDb;
 
 class Plugin {
     /**
@@ -28,6 +29,13 @@ class Plugin {
             AOP_PLUGIN_FILE,
             [self::class, 'onPluginDeactivation']
         );
+
+        register_uninstall_hook(
+            AOP_PLUGIN_FILE,
+            [self::class, 'onPluginUninstall']
+        );
+
+        //add_action( 'save_post', PetDb::addPostOnCreatePet );
     }
 
     /**
@@ -51,6 +59,7 @@ class Plugin {
     {
         // start CPT declaration
         PetPostType::register();
+        PetPostType::addCustomFields();
         // start Taxonomy declaration
         SpeciesTaxonomy::register();
     }
@@ -88,6 +97,9 @@ class Plugin {
         // associate the custom cap of our CPT and CT with the admin
         PetPostType::addCaps();
         SpeciesTaxonomy::addCaps();
+
+        // create custom tables
+        PetDb::generateTables();
     }
     
     /**
@@ -101,5 +113,17 @@ class Plugin {
         // Dissociate the custom caps of our CPT and CT from the admin
         PetPostType::removeCaps();
         SpeciesTaxonomy::removeCaps();
+    }
+
+    /**
+     * onPluginUninstall()
+     * Actions to perform on plugin uninstallation
+     *
+     * @return void
+     */
+    public function onPluginUninstall()
+    {
+        // actions to perform on plugin uninstallation
+        PetDb::dropTables();
     }
 }

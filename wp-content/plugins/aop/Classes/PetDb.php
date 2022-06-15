@@ -4,7 +4,7 @@ namespace aop\Classes;
 
 use aop\Taxonomy\SpeciesTaxonomy;
 
-class Database {
+class PetDb {
 
 /**
      * generateTables
@@ -23,27 +23,9 @@ class Database {
         $charsetCollate = $wpdb->get_charset_collate();
 
         // écrire la requête à exécuter
-        // on crée une table (si elle n'existe pas déjà => IF NOT EXSITS), avec les champs suivants :
-        // developer_id => post de cpt developer
-        // technology_id => term de la taxo technology
-        // grade => note (niveau de maîtrise)
-        /* $sql = "
-            CREATE TABLE IF NOT EXISTS `{$tableName}` (
-                `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `breed` VARCHAR(100) UNSIGNED,
-                `name` VARCHAR(100) UNSIGNED,
-                `birth_date` DATE,
-                `picture`,
-                `color` VARCHAR(100) UNSIGNED,
-                `size` BIGINT(20) UNSIGNED,
-                `weight` BIGINT(20) UNSIGNED,
-                `identification`
-                `description` 
-                FOREIGN KEY(`species_id`) REFERENCES `{$wpdb->prefix}terms`(`term_id`)
-            ) {$charsetCollate};
-        "; */
+        // on crée une table (si elle n'existe pas déjà => IF NOT EXSITS) :
         $sql = "
-        CREATE TABLE `{$tableName}` (
+        CREATE TABLE IF NOT EXISTS `{$tableName}` (
             `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `breed` varchar(100) NULL,
             `name` varchar(100) NULL,
@@ -53,16 +35,19 @@ class Database {
             `weight` float NULL,
             `identification` varchar(100) NULL,
             `description` longtext NULL,
-            `owner_id` bigint(20) unsigned NOT NULL,
-            FOREIGN KEY (`owner_id`) REFERENCES `{$wpdb->prefix}users` (`ID`) ON DELETE SET NULL
+            `owner_id` bigint(20) unsigned DEFAULT 0,
+            `post_id` bigint(20) unsigned DEFAULT 0,
+            FOREIGN KEY (`owner_id`) REFERENCES `{$wpdb->prefix}users`(`ID`),
+            FOREIGN KEY (`post_id`) REFERENCES `{$wpdb->prefix}posts`(`ID`)
           ) COLLATE '{$charsetCollate}';
         ";
+        
 
         // on utlise l'objet wpdb pour faire la requête
         $wpdb->query($sql);
     }
 
-    static public function dropTable()
+    static public function dropTables()
     {
         // on récupère l'objet $wpdb => une globale déclarée par WP
         global $wpdb;
@@ -73,8 +58,7 @@ class Database {
         $wpdb->query('DROP TABLE IF EXISTS ' . $tableName);
     }
 
-
-    static public function getSpeciesId($developerPostId)
+    static public function getSpecies($speciesId)
     {
         // on récupère l'objet wpdb qui permet d'interagir avec la BDD dans WP.
         global $wpdb;
@@ -84,10 +68,10 @@ class Database {
 
         // réaliser la requête en bdd pour récupérer la liste des technologies associées au développeur $developerPostId
         // on utilise la syntaxe sprintf() qui permet de définir des zones variables dans une chaîne => %d sera un integer
-        $sql = "SELECT * FROM `{$tableName}` WHERE developer_id=%d";
+        $sql = "SELECT * FROM `{$tableName}` WHERE species_id=%d";
 
         // on utilise wpdb:->prepare() pour préparer notre requête SQL et lui fournir les arguments à utiliser
-        $preparedQuery = $wpdb->prepare($sql, [$developerPostId]);
+        $preparedQuery = $wpdb->prepare($sql, [$speciesId]);
 
         // exécution de la requête
         // on récupère le résultat sous la forme d'un array associatif
@@ -97,17 +81,16 @@ class Database {
         // on retourne un array qui contient pour chaque technologie
         // - l'objet WP_Term 
         // - le niveau de maîtrise (int)
-        $technologyList = [];
+        $speciesList = [];
         foreach ($relationList as $relation) {
-            $technology = [
-                'term' => get_term($relation['technology_id'], TechnologyTaxonomy::TAXONOMY_KEY),
-                'grade' => $relation['grade']
+            $species = [
+                'term' => get_term($relation['species_id'], SpeciesTaxonomy::TAXONOMY_KEY),
             ];
 
-            $technologyList[$technology['term']->slug] = $technology;
+            $speciesList[$species['term']->slug] = $species;
         }
         
-        return $technologyList;
+        return $speciesList;
     }
 
     /**
@@ -150,5 +133,14 @@ class Database {
         $wpdb->insert($tableName, ['technology_id' => $technologyId, 'grade' => $grade, 'developer_id' => $developerPostId]);
     }
 
+    /**
+     * I don't know what this function does
+     *
+     * @param [type] $developerPostId
+     * @return void
+     */
+    static public function addPostOnCreatePet()
+    {
 
+    }
 }

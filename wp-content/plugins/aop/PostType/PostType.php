@@ -32,6 +32,7 @@ class PostType {
                 ],
                 'show_in_rest' => true,
             ]
+            
         );
 
     }
