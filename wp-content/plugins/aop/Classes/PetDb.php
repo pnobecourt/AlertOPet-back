@@ -23,27 +23,9 @@ class PetDb {
         $charsetCollate = $wpdb->get_charset_collate();
 
         // écrire la requête à exécuter
-        // on crée une table (si elle n'existe pas déjà => IF NOT EXSITS), avec les champs suivants :
-        // developer_id => post de cpt developer
-        // technology_id => term de la taxo technology
-        // grade => note (niveau de maîtrise)
-        /* $sql = "
-            CREATE TABLE IF NOT EXISTS `{$tableName}` (
-                `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `breed` VARCHAR(100) UNSIGNED,
-                `name` VARCHAR(100) UNSIGNED,
-                `birth_date` DATE,
-                `picture`,
-                `color` VARCHAR(100) UNSIGNED,
-                `size` BIGINT(20) UNSIGNED,
-                `weight` BIGINT(20) UNSIGNED,
-                `identification`
-                `description` 
-                FOREIGN KEY(`species_id`) REFERENCES `{$wpdb->prefix}terms`(`term_id`)
-            ) {$charsetCollate};
-        "; */
+        // on crée une table (si elle n'existe pas déjà => IF NOT EXSITS) :
         $sql = "
-        CREATE TABLE `{$tableName}` (
+        CREATE TABLE IF NOT EXISTS `{$tableName}` (
             `id` int unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `breed` varchar(100) NULL,
             `name` varchar(100) NULL,
@@ -53,16 +35,19 @@ class PetDb {
             `weight` float NULL,
             `identification` varchar(100) NULL,
             `description` longtext NULL,
-            `owner_id` bigint(20) unsigned NOT NULL,
-            FOREIGN KEY (`owner_id`) REFERENCES `{$wpdb->prefix}users` (`ID`) ON DELETE SET NULL
+            `owner_id` bigint(20) unsigned DEFAULT 0,
+            `post_id` bigint(20) unsigned DEFAULT 0,
+            FOREIGN KEY (`owner_id`) REFERENCES `{$wpdb->prefix}users`(`ID`),
+            FOREIGN KEY (`post_id`) REFERENCES `{$wpdb->prefix}posts`(`ID`)
           ) COLLATE '{$charsetCollate}';
         ";
+        
 
         // on utlise l'objet wpdb pour faire la requête
         $wpdb->query($sql);
     }
 
-    static public function dropTable()
+    static public function dropTables()
     {
         // on récupère l'objet $wpdb => une globale déclarée par WP
         global $wpdb;
