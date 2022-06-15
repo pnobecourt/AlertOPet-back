@@ -57,6 +57,10 @@ define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
 define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
 define( 'NONCE_SALT',       'put your unique phrase here' );
 
+// JWT auth plugin config
+define('JWT_AUTH_SECRET_KEY', 'your-top-secret-key');
+define('JWT_AUTH_CORS_ENABLE', true);
+
 /**#@-*/
 
 /**
