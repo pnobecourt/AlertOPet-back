@@ -60,19 +60,6 @@ class PetPostType extends PostType {
                 'description' => '',
             )
         ); */
-        add_post_type_support(
-            'pets',
-            'custom-fields',
-            [
-                'breed' => 'breed',
-                'name' => 'name',
-                'birth_date' => 'birth_date',
-                'color' => 'color',
-                'size' => 'size',
-                'weight' => 'weight',
-                'identification' => 'identification',
-                'description' => 'description'
-            ]
-        );
     }
+    
 }   

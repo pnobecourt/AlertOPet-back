@@ -58,6 +58,23 @@ class PetDb {
         $wpdb->query('DROP TABLE IF EXISTS ' . $tableName);
     }
 
+    static public function savePet()
+    {
+        global $wpdb;
+
+        $tableName = $wpdb->prefix . 'pets';
+
+        //print_r($testInput);
+
+        /* $wpdb->insert(
+            'table',
+            array( 'value' => $value ),
+            array( '%s' ),
+            ); */
+
+        //add_action( 'save_post', int $post_ID, WP_Post() $post, bool $update );
+    }
+
     static public function getSpecies($speciesId)
     {
         // on récupère l'objet wpdb qui permet d'interagir avec la BDD dans WP.
@@ -75,22 +92,22 @@ class PetDb {
 
         // exécution de la requête
         // on récupère le résultat sous la forme d'un array associatif
-        $relationList = $wpdb->get_results($preparedQuery, ARRAY_A);
+        $petInformation = $wpdb->get_results($preparedQuery, ARRAY_A);
         
         
         // on retourne un array qui contient pour chaque animale
         // - l'objet WP_Term 
         // - le niveau de maîtrise (int)
-        $speciesList = [];
-        foreach ($relationList as $relation) {
-            $species = [
-                'term' => get_term($relation['species_id'], SpeciesTaxonomy::TAXONOMY_KEY),
-            ];
+        // $speciesList = [];
+        // foreach ($relationList as $relation) {
+        //     $species = [
+        //         'term' => get_term($relation['species_id'], SpeciesTaxonomy::TAXONOMY_KEY),
+        //     ];
 
-            $speciesList[$species['term']->slug] = $species;
-        }
+        //     $speciesList[$species['term']->slug] = $species;
+        // }
         
-        return $speciesList;
+        return json_encode($petInformation);
     }
 
     /**
@@ -132,15 +149,5 @@ class PetDb {
         $tableName = $wpdb->prefix . 'developer_technology';
         $wpdb->insert($tableName, ['technology_id' => $technologyId, 'grade' => $grade, 'developer_id' => $developerPostId]);
     }
-
-    /**
-     * I don't know what this function does
-     *
-     * @param [type] $developerPostId
-     * @return void
-     */
-    static public function addPet() //array ou liste d'arguments
-    {
-
-    }
+    
 }
