@@ -22,7 +22,9 @@ class Plugin {
 
         add_action( 'rest_api_init', [self::class, 'onRestInit']);
 
-        add_action( 'save_post_pet', PetDb::savePet(), 10, 3 );
+        add_action('admin_init', [PetPostType::render_post_meta_boxes()]);
+
+        add_action( 'save_post_pet', PetDb::savePet($post_id, $post, $update), 10, 3 );
 
         register_activation_hook(
             AOP_PLUGIN_FILE,
@@ -74,6 +76,7 @@ class Plugin {
     {
         // start CPT declaration
         PetPostType::register();
+        //PetPostType::registerPetMeta();
         PetPostType::addCustomFields();
         // start Taxonomy declaration
         SpeciesTaxonomy::register();

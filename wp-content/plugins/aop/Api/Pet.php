@@ -50,16 +50,9 @@ class Pet {
         $response->data['idOwner'] = strip_tags($parameters['idOwner']);
         $response->data['idSpecies'] = strip_tags($parameters['idSpecies']);
 
-        /* $post->data['breed'] = strip_tags($parameters['breed']);
-        $post->data['name'] = strip_tags($parameters['name']);
-        $post->data['birth_date'] = strip_tags($parameters['birth_date']);
-        $post->data['color'] = strip_tags($parameters['color']);
-        $post->data['size'] = strip_tags($parameters['size']);
-        $post->data['weight'] = strip_tags($parameters['weight']);
-        $post->data['identification'] = strip_tags($parameters['identification']);
-        $post->data['description'] = strip_tags($parameters['description']);
-        $post->data['idOwner'] = strip_tags($parameters['idOwner']);
-        $post->data['idSpecies'] = strip_tags($parameters['idSpecies']); */
+        //TEST - pour récupérer les données envoyées par la requête après le save_post_pet j'envoie $response->data dans une variable globale
+        global $petRequest;
+        $petRequest = $response->data;
         
         // on est dans un filter, on doit donc retourner une valeur
         return $response;

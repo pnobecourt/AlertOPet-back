@@ -44,9 +44,15 @@ class PetPostType extends PostType {
         ]
     ];
 
+    static public function registerPetMeta()
+    {
+        global $wpdb;
+        $wpdb->petmeta = "{$wpdb->prefix}petmeta";
+    }    
+
     static public function addCustomFields()
     {
-        /* add_post_type_support(
+        add_post_type_support(
             'pets',
             'custom-fields',
             array(
@@ -59,7 +65,44 @@ class PetPostType extends PostType {
                 'identification' => '',
                 'description' => '',
             )
-        ); */
+        );
+    }
+
+    static public function add_post_meta_boxes() { 
+        add_meta_box(
+             'birth_date', // id de la metabox
+             'Date de naissance', // titre de la custom box
+             [self::class, 'render_post_meta_boxes'],  // appel de la fonction qui affiche le html
+             'pets',  // Nom du post type
+             'side',
+             'low'
+         );
+     }
+ 
+ 
+    static public function render_post_meta_boxes() {
+        global $post;
+        $custom = get_post_custom($post->ID);
+        $fieldData = $custom['_birth_date'][0];
+        echo "<input type='date' name='_birth_date' value='$fieldData' placeholder='Birth Date'/>";
+
+        /* $value = get_post_meta( $post->ID, '_meta-data', true );
+        ?>
+            <label for="fblink">Liens Facebook</label>
+            <input type="text" id="fblink" name="fblink">
+        <?php  */
+
+
+    }
+
+    static public function save_post_meta_boxes() {
+        global $post;
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+        if (array_key_exists('_birth_date', $_POST)) {
+            update_post_meta($post->ID, '_birth_date', $_POST['_birth_date']);
+        }
     }
     
 }   

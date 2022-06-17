@@ -29,6 +29,7 @@ class PostType {
                     'thumbnail',
                     'author',
                     'comments',
+                    'custom-fields',
                 ],
                 'show_in_rest' => true,
             ]

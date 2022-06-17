@@ -2,6 +2,7 @@
 
 namespace aop\Classes;
 
+use aop\PostType\PetPostType;
 use aop\Taxonomy\SpeciesTaxonomy;
 
 class PetDb {
@@ -58,13 +59,27 @@ class PetDb {
         $wpdb->query('DROP TABLE IF EXISTS ' . $tableName);
     }
 
-    static public function savePet()
+    static public function savePet($post_id, $post, $update)
     {
         global $wpdb;
 
         $tableName = $wpdb->prefix . 'pets';
 
-        //print_r($testInput);
+        PetPostType::save_post_meta_boxes();
+
+        //var_dump($post);
+        //die();
+
+        // post data should be accessible from $_POST, $_GET or the global $post_data
+        // @link https://developer.wordpress.org/reference/hooks/save_post/
+        //print_r($post_data);
+        //print_r($_POST);
+        //print_r($_GET);
+        //print_r($response);
+        //die($post_data);
+        //die($_POST);
+        //die($_GET);
+        //die($response);
 
         /* $wpdb->insert(
             'table',
