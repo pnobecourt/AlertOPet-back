@@ -17,15 +17,15 @@ class PetApi
         ]);
         register_rest_route('aop/v1', '/pet/(?P<id>[\d]+)', [
             'methods' => 'GET',
-            'callback' => [self::class, 'handleGetPet'],
+            'callback' => [self::class, 'handleGetPetById'],
         ]);
         register_rest_route('aop/v1', '/pet/(?P<id>[\d]+)', [
             'methods' => 'POST',
-            'callback' => [self::class, 'handleEditPet'],
+            'callback' => [self::class, 'handleEditPetById'],
         ]);
         register_rest_route('aop/v1', '/pet/(?P<id>[\d]+)', [
             'methods' => 'DELETE',
-            'callback' => [self::class, 'handleDeletePet'],
+            'callback' => [self::class, 'handleDeletePetById'],
         ]);
     }
 
@@ -60,11 +60,11 @@ class PetApi
         return $response;
     }
 
-    public static function handleGetPet($request)
+    public static function handleGetPetById($request)
     {
         $petPostData = get_post($request['id'], ARRAY_A);
         
-        $petMetaData = PetDatabase::GetPetMetaData($request['id']);
+        $petMetaData = PetDatabase::GetPetMetaDataByPetId($request['id']);
 
         $preparedData = [
             'ID' => $petPostData['ID'],
@@ -81,7 +81,28 @@ class PetApi
         return $preparedData;
     }
 
-    public static function handleEditPet($request)
+    public static function handleGetAllPetsByOwnerId($request)
+    {
+        $petPostData = get_post($request['id'], ARRAY_A);
+        
+        $petMetaData = PetDatabase::GetAllPetsMetaDataByOwnerId($request['post_author']);
+
+        $preparedData = [
+            'ID' => $petPostData['ID'],
+            'content' => $petPostData['post_content'],
+            'breed' => $petMetaData[0]['breed'],
+            'identification' => $petMetaData[0]['identification'],
+            'birth_date' => $petMetaData[0]['birth_date'],
+            'color' => $petMetaData[0]['color'],
+            'size' => $petMetaData[0]['size'],
+            'weight' => $petMetaData[0]['weight']
+        ];
+
+        // on renvoie la réponse au format JSON
+        return $preparedData;
+    }
+
+    public static function handleEditPetById($request)
     {
         // cette méthode doit return quelque chose pour servir de réponse
         // selon la configuration de PHP, et lorsque le body de la requête est au format json, $_POST reste vide
@@ -104,7 +125,7 @@ class PetApi
         // si on a reçu un int
         if (is_int($petPostIdOrError)) {
 
-            PetDatabase::UpdatePetMetaData($petData, $petPostIdOrError);
+            PetDatabase::UpdatePetMetaDataByPetId($petData, $petPostIdOrError);
 
             $response = ["userId" => $petPostIdOrError];
         } else {
@@ -116,7 +137,7 @@ class PetApi
         return $response;
     }
     
-    public static function handleDeletePet($request)
+    public static function handleDeletePetById($request)
     {
         $userIdToDelete = (int) $request['id'];
         $userLoginToDelete = get_userdata($userIdToDelete)->data->user_login;
@@ -124,6 +145,9 @@ class PetApi
         include_once ABSPATH . 'wp-admin/includes/user.php';
 
         if (is_int($userIdToDelete) && $userIdToDelete > 1) {
+
+            PetDatabase::DeletePetMetaDataByPetId($request['id']);
+
             $response = wp_delete_user($userIdToDelete);
         } elseif (is_int($userIdToDelete) && $userIdToDelete == 1) {
             $response = "Impossible de supprimer le super-utilisateur";
