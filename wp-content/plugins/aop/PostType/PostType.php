@@ -1,6 +1,6 @@
 <?php
 
-// Cette classe sert de classe générique pour tous les PostType. Dans chaque classe enfant on viendra modifier seulement les informations nécessaires
+// This class is a generic class for all PostTypes. In each subclass we will modify only the necessary information
 
 namespace aop\PostType;
 
@@ -20,20 +20,15 @@ class PostType {
             [
                 'label' => static::POST_TYPE_LABEL,
                 'public' => true,
-                'has_archive' => true,
+                'has_archive' => static::POST_TYPE_ARCHIVE,
                 'rewrite' => ['slug' => static::POST_TYPE_SLUG],
                 'capabilities' => static::CAPABILITIES,
-                'supports' => [
-                    'title',
-                    'editor',
-                    'thumbnail',
-                    'author',
-                    'comments',
-                    'custom-fields',
-                ],
+                'supports' => static::SUPPORTS,
                 'show_in_rest' => true,
+                'delete_with_user' => true,
+                'show_ui' => true,
+                'show_in_menu' => static::SHOW_IN_MENU,
             ]
-            
         );
 
     }

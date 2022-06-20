@@ -65,10 +65,7 @@ class PetDb {
 
         $tableName = $wpdb->prefix . 'pets';
 
-        PetPostType::save_post_meta_boxes();
-
-        //var_dump($post);
-        //die();
+        //PetPostType::save_post_meta_boxes();
 
         // post data should be accessible from $_POST, $_GET or the global $post_data
         // @link https://developer.wordpress.org/reference/hooks/save_post/

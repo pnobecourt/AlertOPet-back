@@ -2,45 +2,49 @@
 
 namespace aop;
 
+use aop\Api\UserApi;
+use aop\Api\PetApi;
+use aop\Classes\Database;
+use aop\PostType\OwnerPostType;
 use aop\PostType\PetPostType;
+use aop\PostType\AlertPostType;
 use aop\Taxonomy\SpeciesTaxonomy;
-use aop\Classes\PetDb;
-use aop\Api\UserRegister;
-use aop\Api\Pet;
+use aop\Taxonomy\AlertTypeTaxonomy;
+use aop\Taxonomy\AlertStatusTaxonomy;
 
 class Plugin {
+
     /**
-     * Entry method
+     * Starts the plugin
      *
      * @return void
      */
     static public function run()
     {
+        // actions to perform before init 
         self::preInit();
-        
+
+        // we attach on the init hook, so that the plugin is ready to use
         add_action('init', [self::class, 'onInit']);
 
+        // we attach on the rest_api_init hook, so that the plugin is ready to use
         add_action( 'rest_api_init', [self::class, 'onRestInit']);
 
-        add_action('admin_init', [PetPostType::render_post_meta_boxes()]);
-
-        add_action( 'save_post_pet', PetDb::savePet($post_id, $post, $update), 10, 3 );
-
+        // idem pour l'activation du plugin
         register_activation_hook(
             AOP_PLUGIN_FILE,
-            [self::class, 'onPluginActivation']
+            [self::class, 'onPluginActivation'] // la méthode à déclencher à l'activation du plugin
         );
-
+        // idem pour la désactivation du plugin
         register_deactivation_hook(
             AOP_PLUGIN_FILE,
-            [self::class, 'onPluginDeactivation']
+            [self::class, 'onPluginDeactivation'] // la méthode à déclencher à la désactivation du plugin
         );
-
+        // idem pour la désinstallation du plugin
         register_uninstall_hook(
             AOP_PLUGIN_FILE,
             [self::class, 'onPluginUninstall']
         );
-
     }
 
     /**
@@ -51,19 +55,15 @@ class Plugin {
      */
     static public function preInit()
     {
-        // actions to perform before the WP init hook
-        // on gère la whitelist pour le plugin jwt-auth
-        // on veut return un array qui contient toutes les routes à ne PAS protéger
+        // we add the new route to the jwt-auth whitelist, otherwise an unregistered user couldn't access it and create account
+        // we return an array that contains all unprotected routes
         add_filter('jwt_auth_whitelist', function ($endpoints) {
             $your_endpoints = [
-                '/wp-json/jwt-auth/v1/token',
                 '/wp-json/aop/v1/user',
             ];
-
-        return array_unique(array_merge($endpoints, $your_endpoints));
+        
+            return array_unique(array_merge($endpoints, $your_endpoints));
         });
-
-        Pet::run();
     }
 
     /**
@@ -74,55 +74,40 @@ class Plugin {
      */
     static public function onInit()
     {
-        // start CPT declaration
+        // registration of custom post types
+        OwnerPostType::register();
         PetPostType::register();
-        //PetPostType::registerPetMeta();
-        PetPostType::addCustomFields();
-        // start Taxonomy declaration
+        AlertPostType::register();
+        // registration of custom taxonomies
         SpeciesTaxonomy::register();
+        AlertTypeTaxonomy::register();
+        AlertStatusTaxonomy::register();
     }
 
-    /**
-     * Regroups all the actions to perform on WordPress rest_api_init hook
-     *
-     * @return void
-     */
     static public function onRestInit()
     {
-        remove_filter( 'rest_pre_serve_request', 'rest_send_cors_headers' );
-        add_filter( 'rest_pre_serve_request', [self::class, 'setupCors']);
+        remove_filter('rest_pre_serve_request', 'rest_send_cors_headers');
+        add_filter('rest_pre_serve_request', [self::class, 'setupCors']);
 
-        // ajouter la route custom pour enregistrer un utilisateur
-        UserRegister::initRoute();
-        // ajouter la route custom pour enregistrer un animal
-        //Pet::initRoute();
+        // we call UserRegisterApi::initRoute() to add a custom route to the REST API
+        UserApi::initRoute();
+
+        // we call PetRegisterApi::initRoute() to add a custom route to the REST API
+        PetApi::initRoute();
     }
 
-    /**
-     * setupCors()
-     * filters the Cross Origin Policy
-     *
-     * @return void
-     */
-    static public function setupCors()
-    {
-        header( 'Access-Control-Allow-Origin: *' );
-    }
-
-    /**
-     * onPluginActivation()
-     * Actions to perform on plugin activation
-     *
-     * @return void
-     */
     static public function onPluginActivation()
     {
-        // associate the custom cap of our CPT and CT with the admin
+        // associer les caps custom de nos CPT et CT à l'admin
+        OwnerPostType::addCaps();
         PetPostType::addCaps();
+        AlertPostType::addCaps();
         SpeciesTaxonomy::addCaps();
+        AlertTypeTaxonomy::addCaps();
+        AlertStatusTaxonomy::addCaps();
 
-        // create custom tables
-        PetDb::generateTables();
+        // create the custom mysql tables
+        Database::generatePetTable();
     }
     
     /**
@@ -133,20 +118,27 @@ class Plugin {
      */
     static public function onPluginDeactivation()
     {
-        // Dissociate the custom caps of our CPT and CT from the admin
+        // Dissocier les caps custom de nos CPT et CT de l'admin
+        OwnerPostType::removeCaps();
         PetPostType::removeCaps();
+        AlertPostType::removeCaps();
         SpeciesTaxonomy::removeCaps();
+        AlertTypeTaxonomy::removeCaps();
+        AlertStatusTaxonomy::removeCaps();
     }
 
-    /**
-     * onPluginUninstall()
-     * Actions to perform on plugin uninstallation
-     *
-     * @return void
-     */
     public function onPluginUninstall()
     {
         // actions to perform on plugin uninstallation
-        PetDb::dropTables();
+        Database::dropPetTable();
     }
+
+    static public function setupCors()
+    {
+        header( 'Access-Control-Allow-Origin: *' );
+        // header( 'Access-Control-Allow-Methods: GET,POST,PUT,PATCH,DELETE,OPTIONS' );
+        header( 'Access-Control-Allow-Methods: GET,POST,PUT,PATCH,DELETE' );
+        // header( 'Access-Control-Allow-Credentials: true' );
+    }
+
 }
