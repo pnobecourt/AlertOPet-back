@@ -5,7 +5,6 @@ namespace aop;
 use aop\Api\UserApi;
 use aop\Api\PetApi;
 use aop\Classes\Database;
-use aop\PostType\OwnerPostType;
 use aop\PostType\PetPostType;
 use aop\PostType\AlertPostType;
 use aop\Taxonomy\SpeciesTaxonomy;
@@ -75,7 +74,6 @@ class Plugin {
     static public function onInit()
     {
         // registration of custom post types
-        OwnerPostType::register();
         PetPostType::register();
         AlertPostType::register();
         // registration of custom taxonomies
@@ -99,7 +97,6 @@ class Plugin {
     static public function onPluginActivation()
     {
         // associer les caps custom de nos CPT et CT à l'admin
-        OwnerPostType::addCaps();
         PetPostType::addCaps();
         AlertPostType::addCaps();
         SpeciesTaxonomy::addCaps();
@@ -119,7 +116,6 @@ class Plugin {
     static public function onPluginDeactivation()
     {
         // Dissocier les caps custom de nos CPT et CT de l'admin
-        OwnerPostType::removeCaps();
         PetPostType::removeCaps();
         AlertPostType::removeCaps();
         SpeciesTaxonomy::removeCaps();
