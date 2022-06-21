@@ -139,22 +139,20 @@ class PetApi
     
     public static function handleDeletePetById($request)
     {
-        $userIdToDelete = (int) $request['id'];
-        $userLoginToDelete = get_userdata($userIdToDelete)->data->user_login;
+        $petIdToDelete = (int) $request['id'];
 
-        include_once ABSPATH . 'wp-admin/includes/user.php';
+        $deletePetMeta = PetDatabase::DeletePetMetaDataByPetId($request['id']);
 
-        if (is_int($userIdToDelete) && $userIdToDelete > 1) {
+        if (is_int($deletePetMeta)) {
 
-            PetDatabase::DeletePetMetaDataByPetId($request['id']);
+            $response = wp_delete_post($petIdToDelete);
 
-            $response = wp_delete_user($userIdToDelete);
-        } elseif (is_int($userIdToDelete) && $userIdToDelete == 1) {
-            $response = "Impossible de supprimer le super-utilisateur";
         } else {
-            $response = "Erreur lors de la suppression de l'utilisateur " . $userLoginToDelete;
+
+            $response = "Erreur";
+
         }
-        
+
         // on renvoie la réponse au format JSON
         return $response;
     }
