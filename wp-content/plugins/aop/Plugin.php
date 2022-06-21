@@ -58,6 +58,12 @@ class Plugin {
         // we return an array that contains all unprotected routes
         add_filter('jwt_auth_whitelist', function ($endpoints) {
             $your_endpoints = [
+                '/wp/v2/posts',
+                '/wp/v2/alert',
+                '/wp/v2/media',
+                '/wp/v2/species',
+                '/wp/v2/alert_type',
+                '/wp/v2/alert_status',
                 '/wp-json/aop/v1/user',
             ];
         
