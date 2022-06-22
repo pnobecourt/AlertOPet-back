@@ -4,6 +4,7 @@ namespace aop;
 
 use aop\Api\UserApi;
 use aop\Api\PetApi;
+use aop\Api\PostMetaApi;
 use aop\Classes\Database;
 use aop\PostType\PetPostType;
 use aop\PostType\AlertPostType;
@@ -86,6 +87,9 @@ class Plugin {
         SpeciesTaxonomy::register();
         AlertTypeTaxonomy::register();
         AlertStatusTaxonomy::register();
+
+        // register metas for custom post types
+        AlertPostType::registerMetas();
     }
 
     static public function onRestInit()
@@ -98,6 +102,10 @@ class Plugin {
 
         // we call PetRegisterApi::initRoute() to add a custom route to the REST API
         PetApi::initRoute();
+
+        // we call PostMetaApi::register() to register the posts metas
+        // PostMetaApi::register();
+
     }
 
     static public function onPluginActivation()
