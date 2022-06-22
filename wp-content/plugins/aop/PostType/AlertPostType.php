@@ -16,6 +16,8 @@ class AlertPostType extends PostType {
         'thumbnail', // on autorise l'utilisation d'images mises en avant (featured images)
         'author', // ce custom post type utilisera les auteurs
         'comments',
+        'custom-fields',
+        'page-attributes',
     ];
     const CAPABILITIES = [
         // [default cap, existing in WP] => [custom cap that corrspond to the same action but for the current CPT]
@@ -70,4 +72,86 @@ class AlertPostType extends PostType {
             'delete_published_alerts' => false,
         ],
     ];
+
+    static public function registerMetas()
+    {
+        /* // array for posts metas
+        // as postype => postmetas
+        $metasArray = [
+            "alert" => [
+                'datetime',
+                'localization',
+                'petId',
+                'petBreed',
+                'petName',
+                'petAge',
+                'petColor',
+                'petSize',
+                'petWeight',
+                'petDescription',
+                'contactPhone',
+                'contactMail'
+                ]
+        ];
+
+        // register meta
+        foreach ($metasArray as $postType) {
+            foreach ($postType as $meta)
+            register_meta('post', $meta, [
+                'object_subtype' => $postType,
+                'show_in_rest' => true
+            ]);
+        } */
+
+        register_meta('post', 'datetime', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'localization', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'petId', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'petBreed', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'petName', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'petAge', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'petColor', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'petSize', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'petWeight', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'petDescription', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'contactPhone', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        register_meta('post', 'contactMail', [
+            'object_subtype' => 'alert',
+            'show_in_rest' => true
+        ]);
+        
+    }
+
 }

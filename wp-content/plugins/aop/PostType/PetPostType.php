@@ -16,6 +16,8 @@ class PetPostType extends PostType {
         'thumbnail', // on autorise l'utilisation d'images mises en avant (featured images)
         'author', // ce custom post type utilisera les auteurs
         'comments',
+        'custom-fields',
+        'page-attributes',
     ];
     const CAPABILITIES = [
         // [default cap, existing in WP] => [custom cap that corrspond to the same action but for the current CPT]
