@@ -77,50 +77,74 @@ class AlertPostType extends PostType {
     {
         register_meta('post', 'datetime', [
             'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'localization', [
             'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'petId', [
             'object_subtype' => 'alert',
+            'type' => 'integer',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'petBreed', [
             'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'petName', [
             'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'petAge', [
             'object_subtype' => 'alert',
+            'type' => 'integer',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'petColor', [
             'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'petSize', [
             'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'petWeight', [
             'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'petDescription', [
             'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'contactPhone', [
             'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
             'show_in_rest' => true
         ]);
         register_meta('post', 'contactMail', [
             'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
             'show_in_rest' => true
         ]);
     }
