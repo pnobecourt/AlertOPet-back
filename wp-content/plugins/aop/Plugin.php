@@ -4,7 +4,6 @@ namespace aop;
 
 use aop\Api\UserApi;
 use aop\Api\PetApi;
-use aop\Api\PostMetaApi;
 use aop\Classes\Database;
 use aop\PostType\PetPostType;
 use aop\PostType\AlertPostType;

@@ -75,34 +75,6 @@ class AlertPostType extends PostType {
 
     static public function registerMetas()
     {
-        /* // array for posts metas
-        // as postype => postmetas
-        $metasArray = [
-            "alert" => [
-                'datetime',
-                'localization',
-                'petId',
-                'petBreed',
-                'petName',
-                'petAge',
-                'petColor',
-                'petSize',
-                'petWeight',
-                'petDescription',
-                'contactPhone',
-                'contactMail'
-                ]
-        ];
-
-        // register meta
-        foreach ($metasArray as $postType) {
-            foreach ($postType as $meta)
-            register_meta('post', $meta, [
-                'object_subtype' => $postType,
-                'show_in_rest' => true
-            ]);
-        } */
-
         register_meta('post', 'datetime', [
             'object_subtype' => 'alert',
             'show_in_rest' => true
@@ -151,7 +123,6 @@ class AlertPostType extends PostType {
             'object_subtype' => 'alert',
             'show_in_rest' => true
         ]);
-        
     }
 
 }
