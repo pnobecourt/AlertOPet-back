@@ -40,8 +40,8 @@ class PetApi
 
         $petPostIdOrError = wp_insert_post([
             'post_type' => 'pet',
-            'post_title' => $petData['title'],
-            'post_content' => $petData['content'],
+            'post_title' => strip_tags($petData['title']),
+            'post_content' => strip_tags($petData['content']),
             'post_status' => 'publish',
         ]);
 
@@ -68,13 +68,13 @@ class PetApi
 
         $preparedData = [
             'ID' => $petPostData['ID'],
-            'content' => $petPostData['post_content'],
-            'breed' => $petMetaData[0]['breed'],
-            'identification' => $petMetaData[0]['identification'],
+            'content' => strip_tags($petPostData['post_content']),
+            'breed' => strip_tags($petMetaData[0]['breed']),
+            'identification' => strip_tags($petMetaData[0]['identification']),
             'birth_date' => $petMetaData[0]['birth_date'],
-            'color' => $petMetaData[0]['color'],
-            'size' => $petMetaData[0]['size'],
-            'weight' => $petMetaData[0]['weight']
+            'color' => strip_tags($petMetaData[0]['color']),
+            'size' => strip_tags($petMetaData[0]['size']),
+            'weight' => strip_tags($petMetaData[0]['weight'])
         ];
 
         // on renvoie la réponse au format JSON
@@ -89,13 +89,13 @@ class PetApi
 
         $preparedData = [
             'ID' => $petPostData['ID'],
-            'content' => $petPostData['post_content'],
-            'breed' => $petMetaData[0]['breed'],
-            'identification' => $petMetaData[0]['identification'],
+            'content' => strip_tags($petPostData['post_content']),
+            'breed' => strip_tags($petMetaData[0]['breed']),
+            'identification' => strip_tags($petMetaData[0]['identification']),
             'birth_date' => $petMetaData[0]['birth_date'],
-            'color' => $petMetaData[0]['color'],
-            'size' => $petMetaData[0]['size'],
-            'weight' => $petMetaData[0]['weight']
+            'color' => strip_tags($petMetaData[0]['color']),
+            'size' => strip_tags($petMetaData[0]['size']),
+            'weight' => strip_tags($petMetaData[0]['weight'])
         ];
 
         // on renvoie la réponse au format JSON
@@ -117,8 +117,8 @@ class PetApi
         $petPostIdOrError = wp_insert_post([
             'ID' => $request['id'],
             'post_type' => 'pet',
-            'post_title' => $petData['title'],
-            'post_content' => $petData['content'],
+            'post_title' => strip_tags($petData['title']),
+            'post_content' => strip_tags($petData['content']),
             'post_status' => 'publish',
         ]);
 
