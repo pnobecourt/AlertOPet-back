@@ -2,6 +2,7 @@
 
 namespace aop;
 
+use aop\Api\AlertApi;
 use aop\Api\UserApi;
 use aop\Api\PetApi;
 use aop\Classes\Database;
@@ -69,6 +70,9 @@ class Plugin {
         
             return array_unique(array_merge($endpoints, $your_endpoints));
         });
+
+        // we run the API customization for cpt alert before init
+        AlertApi::run();
     }
 
     /**
