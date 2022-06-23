@@ -38,9 +38,10 @@ class AlertApi
         $response->data['content']['rendered'] = trim(strip_tags($response->data['content']['rendered']));
 
         global $wpdb;
-        $tableName = $wpdb->prefix . 'posts';
+        
         // get alert picture
-        $sqlAlertPicture = "SELECT `guid` FROM `{$tableName}` WHERE `post_parent` = {$response->data['id']} AND `post_type` = \"attachment\";";
+        $tablePosts = $wpdb->prefix . 'posts';
+        $sqlAlertPicture = "SELECT `guid` FROM `{$tablePosts}` WHERE `post_parent` = {$response->data['id']} AND `post_type` = \"attachment\";";
         $alertPictures = $wpdb->get_results( 
             $wpdb->prepare( 
                 $sqlAlertPicture,
@@ -48,8 +49,10 @@ class AlertApi
         );
         $alertPicture = $alertPictures[0]->guid;
         $response->data['alertPicture'] = $alertPicture;
+
         // get pet picture
-        $sqlPetPicture = "SELECT `guid` FROM `{$tableName}` WHERE `post_parent` = {$response->data['meta']['petId']} AND `post_type` = \"attachment\";";
+        $tablePosts = $wpdb->prefix . 'posts';
+        $sqlPetPicture = "SELECT `guid` FROM `{$tablePosts}` WHERE `post_parent` = {$response->data['meta']['petId']} AND `post_type` = \"attachment\";";
         $petPictures = $wpdb->get_results( 
             $wpdb->prepare( 
                 $sqlPetPicture,
@@ -58,8 +61,10 @@ class AlertApi
         $petPicture = $petPictures[0]->guid;
         $response->data['petPicture'] = $petPicture;
 
-        /* print_r($sqlPetPicture);
-        die(); */
+        // get taxonomies name instead of id
+        $response->data['alert_type'] = get_the_terms($response->data['id'], 'alert_type')[0]->name;
+        $response->data['alert_status'] = get_the_terms($response->data['id'], 'alert_status')[0]->name;
+        
     
         // on est dans un filter, on doit donc retourner une valeur
         return $response;
