@@ -67,17 +67,13 @@ class PetApi
         $petMetaData = PetDatabase::GetPetMetaDataByPetId($request['id']);
 
         global $wpdb;
-
         $tableName = $wpdb->prefix . 'posts';
-
         $sql = "SELECT `guid` FROM `{$tableName}` WHERE `post_parent` = {$request['id']} AND `post_type` = \"attachment\"";
-
         $petPictures = $wpdb->get_results( 
             $wpdb->prepare( 
                 $sql,
             )
         );
-
         $petPicture = $petPictures[0]->guid;
 
         $preparedData = [
