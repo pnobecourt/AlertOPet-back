@@ -66,6 +66,20 @@ class PetApi
         
         $petMetaData = PetDatabase::GetPetMetaDataByPetId($request['id']);
 
+        global $wpdb;
+
+        $tableName = $wpdb->prefix . 'posts';
+
+        $sql = "SELECT `guid` FROM `{$tableName}` WHERE `post_parent` = {$request['id']} AND `post_type` = \"attachment\"";
+
+        $petPictures = $wpdb->get_results( 
+            $wpdb->prepare( 
+                $sql,
+            )
+        );
+
+        $petPicture = $petPictures[0]->guid;
+
         $preparedData = [
             'ID' => $petPostData['ID'],
             'content' => strip_tags($petPostData['post_content']),
@@ -74,7 +88,8 @@ class PetApi
             'birth_date' => $petMetaData[0]['birth_date'],
             'color' => strip_tags($petMetaData[0]['color']),
             'size' => strip_tags($petMetaData[0]['size']),
-            'weight' => strip_tags($petMetaData[0]['weight'])
+            'weight' => strip_tags($petMetaData[0]['weight']),
+            'picture' => $petPicture
         ];
 
         // on renvoie la réponse au format JSON
