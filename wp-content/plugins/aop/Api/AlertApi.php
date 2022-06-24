@@ -41,7 +41,7 @@ class AlertApi
         
         // get alert picture
         $tablePosts = $wpdb->prefix . 'posts';
-        $sqlAlertPicture = "SELECT `guid` FROM `{$tablePosts}` WHERE `post_parent` = {$response->data['id']} AND `post_type` = \"attachment\";";
+        $sqlAlertPicture = "SELECT `guid` FROM `{$tablePosts}` WHERE `post_parent` = {$response->data['id']} AND `post_type` = \"attachment\" AND `post_name` LIKE 'alert%';";
         $alertPictures = $wpdb->get_results( 
             $wpdb->prepare( 
                 $sqlAlertPicture,
@@ -65,7 +65,9 @@ class AlertApi
         $response->data['alert_type'] = get_the_terms($response->data['id'], 'alert_type')[0]->name;
         $response->data['alert_status'] = get_the_terms($response->data['id'], 'alert_status')[0]->name;
         
-    
+        // get pet species
+        $response->data['meta']['petSpecies'] = get_the_terms($response->data['meta']['petId'], 'species')[0]->name;
+
         // on est dans un filter, on doit donc retourner une valeur
         return $response;
     }
