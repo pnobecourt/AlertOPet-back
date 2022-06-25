@@ -49,8 +49,12 @@ class AlertApi
                 $sqlAlertPicture,
             )
         );
-        $alertPicture = $alertPictures[0]->guid;
-        $response->data['alertPicture'] = $alertPicture;
+        if (!empty($alertPictures)){
+            $alertPicture = $alertPictures[0]->guid;
+            $response->data['alertPicture'] = $alertPicture;
+        } else {
+            $response->data['alertPicture'] = null;
+        }
 
         // get pet picture
         $tablePosts = $wpdb->prefix . 'posts';
@@ -60,8 +64,12 @@ class AlertApi
                 $sqlPetPicture,
             )
         );
-        $petPicture = $petPictures[0]->guid;
-        $response->data['petPicture'] = $petPicture;
+        if (!empty($petPictures)){
+            $petPicture = $petPictures[0]->guid;
+            $response->data['petPicture'] = $petPicture;
+        } else {
+            $response->data['petPicture'] = null;
+        }
 
         // get alert qrCode link
         $tablePosts = $wpdb->prefix . 'posts';
@@ -71,15 +79,32 @@ class AlertApi
                 $sqlAlertQrCodeLink,
             )
         );
-        $alertQrCodeLink = $alertQrCodeLinks[0]->guid;
-        $response->data['alertQrCodeLink'] = $alertQrCodeLink;
+        if (!empty($alertQrCodeLinks)){
+            $alertQrCodeLink = $alertQrCodeLinks[0]->guid;
+            $response->data['alertQrCodeLink'] = $alertQrCodeLink;
+        } else {
+            $response->data['alertQrCodeLink'] = null;
+        }
 
         // get taxonomies name instead of id
-        $response->data['alert_type'] = get_the_terms($response->data['id'], 'alert_type')[0]->name;
-        $response->data['alert_status'] = get_the_terms($response->data['id'], 'alert_status')[0]->name;
+        if (!empty(get_the_terms($response->data['id'], 'alert_type'))){
+            $response->data['alert_type'] = get_the_terms($response->data['id'], 'alert_type')[0]->name;
+        } else {
+            $response->data['alert_type'] = null;
+        }
+
+        if (!empty(get_the_terms($response->data['id'], 'alert_status'))){
+            $response->data['alert_status'] = get_the_terms($response->data['id'], 'alert_status')[0]->name;
+        } else {
+            $response->data['alert_status'] = null;
+        }
         
         // get pet species
-        $response->data['meta']['petSpecies'] = get_the_terms($response->data['meta']['petId'], 'species')[0]->name;
+        if (!empty(get_the_terms($response->data['meta']['petId'], 'species'))){
+            $response->data['meta']['petSpecies'] = get_the_terms($response->data['meta']['petId'], 'species')[0]->name;
+        } else {
+            $response->data['meta']['petSpecies'] = null;
+        }
 
         // on est dans un filter, on doit donc retourner une valeur
         return $response;
