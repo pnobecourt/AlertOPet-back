@@ -19,6 +19,8 @@ class AlertApi
         $postType = AlertPostType::POST_TYPE_KEY;
         // au moment où WP prépare la réponse pour notre CPT Recipe, on ajoute des données qui nous intéressent
         add_filter("rest_prepare_{$postType}", [self::class, "onPrepare"], 10, 3);
+        // we add a hook on the save_post_alert
+        add_action("save_post_{$postType}", [self::class, 'onSaveAlertPost'], 10, 3);
     }
 
     /**
@@ -61,6 +63,17 @@ class AlertApi
         $petPicture = $petPictures[0]->guid;
         $response->data['petPicture'] = $petPicture;
 
+        // get alert qrCode link
+        $tablePosts = $wpdb->prefix . 'posts';
+        $sqlAlertQrCodeLink = "SELECT `guid` FROM `{$tablePosts}` WHERE `post_parent` = {$response->data['id']} AND `post_type` = \"attachment\" AND `post_name` LIKE 'qrcode%';";
+        $alertQrCodeLinks = $wpdb->get_results( 
+            $wpdb->prepare( 
+                $sqlAlertQrCodeLink,
+            )
+        );
+        $alertQrCodeLink = $alertQrCodeLinks[0]->guid;
+        $response->data['alertQrCodeLink'] = $alertQrCodeLink;
+
         // get taxonomies name instead of id
         $response->data['alert_type'] = get_the_terms($response->data['id'], 'alert_type')[0]->name;
         $response->data['alert_status'] = get_the_terms($response->data['id'], 'alert_status')[0]->name;
@@ -72,4 +85,26 @@ class AlertApi
         return $response;
     }
 
+    public static function onSaveAlertPost($post_id, $post, $update)
+    {
+        $qrCode = file_get_contents('https://api.qrserver.com/v1/create-qr-code/?format=pngsize=300x300&data=http://devfront.alertopet.com/alert/' . $post_id);
+        $qrCodeFilename = 'qrcode-alert-id-'. $post_id . '.png';
+        $upload_file = wp_upload_bits($qrCodeFilename, null, $qrCode);
+        if (!$upload_file['error']) {
+            $wp_filetype = wp_check_filetype($qrCodeFilename, null);
+            $attachment = array(
+                    'post_mime_type' => $wp_filetype['type'],
+                    'post_parent' => $post_id,
+                    'post_title' => preg_replace('/\.[^.]+$/', '', $qrCodeFilename),
+                    'post_content' => '',
+                    'post_status' => 'inherit'
+                );
+            $attachment_id = wp_insert_attachment($attachment, $upload_file['file'], $post_id);
+            if (!is_wp_error($attachment_id)) {
+                require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+                $attachment_data = wp_generate_attachment_metadata($attachment_id, $upload_file['file']);
+                wp_update_attachment_metadata($attachment_id, $attachment_data);
+            }
+        }
+    }
 }

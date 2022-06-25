@@ -28,7 +28,7 @@ class Plugin {
         add_action('init', [self::class, 'onInit']);
 
         // we attach on the rest_api_init hook, so that the plugin is ready to use
-        add_action( 'rest_api_init', [self::class, 'onRestInit']);
+        add_action('rest_api_init', [self::class, 'onRestInit']);
 
         // idem pour l'activation du plugin
         register_activation_hook(
