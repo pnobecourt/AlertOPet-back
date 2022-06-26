@@ -19,6 +19,14 @@ class PetApi
             'methods' => 'GET',
             'callback' => [self::class, 'handleGetPetById'],
         ]);
+        register_rest_route('aop/v1', '/user/(?P<id>[\d]+)/pets', [
+            'methods' => 'GET',
+            'callback' => [self::class, 'handleGetAllPetsByOwnerId'],
+        ]);
+        register_rest_route('aop/v1', '/pet/user/(?P<id>[\d]+)', [
+            'methods' => 'GET',
+            'callback' => [self::class, 'handleGetAllPetsByOwnerId'],
+        ]);
         register_rest_route('aop/v1', '/pet/(?P<id>[\d]+)', [
             'methods' => 'POST',
             'callback' => [self::class, 'handleEditPetById'],
@@ -47,7 +55,6 @@ class PetApi
 
         // si on a reçu un int
         if (is_int($petPostIdOrError) && $petPostIdOrError > 0) {
-
             PetDatabase::CreatePetMetaData($petData, $petPostIdOrError);
 
             $response = ["userId" => $petPostIdOrError];
@@ -69,8 +76,8 @@ class PetApi
         global $wpdb;
         $tableName = $wpdb->prefix . 'posts';
         $sql = "SELECT `guid` FROM `{$tableName}` WHERE `post_parent` = {$request['id']} AND `post_type` = \"attachment\"";
-        $petPictures = $wpdb->get_results( 
-            $wpdb->prepare( 
+        $petPictures = $wpdb->get_results(
+            $wpdb->prepare(
                 $sql,
             )
         );
@@ -94,20 +101,43 @@ class PetApi
 
     public static function handleGetAllPetsByOwnerId($request)
     {
-        $petPostData = get_post($request['id'], ARRAY_A);
-        
-        $petMetaData = PetDatabase::GetAllPetsMetaDataByOwnerId($request['post_author']);
-
-        $preparedData = [
-            'ID' => $petPostData['ID'],
-            'content' => strip_tags($petPostData['post_content']),
-            'breed' => strip_tags($petMetaData[0]['breed']),
-            'identification' => strip_tags($petMetaData[0]['identification']),
-            'birth_date' => $petMetaData[0]['birth_date'],
-            'color' => strip_tags($petMetaData[0]['color']),
-            'size' => strip_tags($petMetaData[0]['size']),
-            'weight' => strip_tags($petMetaData[0]['weight'])
+        $query_args = [
+            'post_type' => 'pet',
+            'author' => $request['id']
         ];
+
+        $petList = get_posts($query_args);
+
+        foreach ($petList as $pet){
+
+            $petId = $pet->ID;
+
+            $petPostData = get_post($petId, ARRAY_A);
+        
+            $petMetaData = PetDatabase::GetPetMetaDataByPetId($petId);
+
+            global $wpdb;
+            $tableName = $wpdb->prefix . 'posts';
+            $sql = "SELECT `guid` FROM `{$tableName}` WHERE `post_parent` = {$petId} AND `post_type` = \"attachment\"";
+            $petPictures = $wpdb->get_results(
+                $wpdb->prepare(
+                    $sql,
+                )
+            );
+            $petPicture = $petPictures[0]->guid;
+
+            $preparedData[] = [
+                'ID' => $petPostData['ID'],
+                'content' => strip_tags($petPostData['post_content']),
+                'breed' => strip_tags($petMetaData[0]['breed']),
+                'identification' => strip_tags($petMetaData[0]['identification']),
+                'birth_date' => $petMetaData[0]['birth_date'],
+                'color' => strip_tags($petMetaData[0]['color']),
+                'size' => strip_tags($petMetaData[0]['size']),
+                'weight' => strip_tags($petMetaData[0]['weight']),
+                'picture' => $petPicture
+            ];
+        }
 
         // on renvoie la réponse au format JSON
         return $preparedData;
