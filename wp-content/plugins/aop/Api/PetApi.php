@@ -73,6 +73,12 @@ class PetApi
         
         $petMetaData = PetDatabase::GetPetMetaDataByPetId($request['id']);
 
+        if (!empty(get_the_terms($request['id'], 'species'))){
+            $petSpecies = get_the_terms($request['id'], 'species')[0]->name;
+        } else {
+            $petSpecies = null;
+        }
+
         global $wpdb;
         $tableName = $wpdb->prefix . 'posts';
         $sql = "SELECT `guid` FROM `{$tableName}` WHERE `post_parent` = {$request['id']} AND `post_type` = \"attachment\"";
@@ -85,7 +91,9 @@ class PetApi
 
         $preparedData = [
             'ID' => $petPostData['ID'],
+            'title' => strip_tags($petPostData['post_title']),
             'content' => strip_tags($petPostData['post_content']),
+            'species' => $petSpecies,
             'breed' => strip_tags($petMetaData[0]['breed']),
             'identification' => strip_tags($petMetaData[0]['identification']),
             'birth_date' => $petMetaData[0]['birth_date'],
@@ -116,6 +124,12 @@ class PetApi
         
             $petMetaData = PetDatabase::GetPetMetaDataByPetId($petId);
 
+            if (!empty(get_the_terms($petId, 'species'))){
+                $petSpecies = get_the_terms($petId, 'species')[0]->name;
+            } else {
+                $petSpecies = null;
+            }
+
             global $wpdb;
             $tableName = $wpdb->prefix . 'posts';
             $sql = "SELECT `guid` FROM `{$tableName}` WHERE `post_parent` = {$petId} AND `post_type` = \"attachment\"";
@@ -126,9 +140,11 @@ class PetApi
             );
             $petPicture = $petPictures[0]->guid;
 
-            $preparedData[] = [
+            $preparedData = [
                 'ID' => $petPostData['ID'],
+                'title' => strip_tags($petPostData['post_title']),
                 'content' => strip_tags($petPostData['post_content']),
+                'species' => $petSpecies,
                 'breed' => strip_tags($petMetaData[0]['breed']),
                 'identification' => strip_tags($petMetaData[0]['identification']),
                 'birth_date' => $petMetaData[0]['birth_date'],
