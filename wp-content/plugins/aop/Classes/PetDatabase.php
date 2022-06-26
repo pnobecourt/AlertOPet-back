@@ -44,18 +44,6 @@ class PetDatabase
         return $postMeta;
     }
 
-    public static function GetAllPetsMetaDataByOwnerId($request)
-    {
-        
-        global $wpdb;
-        $tableName = $wpdb->prefix . 'pets';
-        $sql = "SELECT * FROM {$tableName} WHERE post_id = {$request}";
-        
-        $postMeta = $wpdb->get_results($sql, ARRAY_A);
-
-        return $postMeta;
-    }
-
     public static function UpdatePetMetaDataByPetId($petData, $petPostId)
     {
 
