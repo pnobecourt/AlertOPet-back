@@ -81,7 +81,7 @@ class UserApi {
         $userMeta = get_user_meta($request['id']);
 
         $preparedData = [
-            'ID' => $userBase->ID,
+            'id' => $userBase->ID,
             'email' => $userBase->data->user_email,
             'role' => $userBase->roles[0],
             'first_name' => $userMeta->first_name,
@@ -106,7 +106,7 @@ class UserApi {
         // en cas de succès de wp_create_user() on récupère l'id de l'utilisateur créés
         // en cas d'échec un objet WP_Error
         $userIdOrErrorObject = wp_insert_user([
-            'ID' => $request['id'],
+            'id' => $request['id'],
             'username' => $request['username'],
             'user_login' => $request['user_login'],
             'user_pass' => $request['user_pass'],
