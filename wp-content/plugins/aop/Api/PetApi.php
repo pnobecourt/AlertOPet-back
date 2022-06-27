@@ -89,8 +89,11 @@ class PetApi
         );
         $petPicture = $petPictures[0]->guid;
 
+        /* print_r($petPostData);
+        die(); */
+
         $preparedData = [
-            'ID' => $petPostData['ID'],
+            'id' => $petPostData['ID'],
             'title' => strip_tags($petPostData['post_title']),
             'content' => strip_tags($petPostData['post_content']),
             'species' => $petSpecies,
@@ -100,7 +103,8 @@ class PetApi
             'color' => strip_tags($petMetaData[0]['color']),
             'size' => strip_tags($petMetaData[0]['size']),
             'weight' => strip_tags($petMetaData[0]['weight']),
-            'picture' => $petPicture
+            'picture' => $petPicture,
+            'owner_id' => intval($petPostData['post_author']),
         ];
 
         // on renvoie la réponse au format JSON
@@ -141,7 +145,7 @@ class PetApi
             $petPicture = $petPictures[0]->guid;
 
             $preparedData = [
-                'ID' => $petPostData['ID'],
+                'id' => $petPostData['ID'],
                 'title' => strip_tags($petPostData['post_title']),
                 'content' => strip_tags($petPostData['post_content']),
                 'species' => $petSpecies,
@@ -151,7 +155,8 @@ class PetApi
                 'color' => strip_tags($petMetaData[0]['color']),
                 'size' => strip_tags($petMetaData[0]['size']),
                 'weight' => strip_tags($petMetaData[0]['weight']),
-                'picture' => $petPicture
+                'picture' => $petPicture,
+                'owner_id' => intval($petPostData['post_author']),
             ];
         }
 
@@ -172,7 +177,7 @@ class PetApi
         // en cas de succès de wp_create_user() on récupère l'id de l'utilisateur créés
         // en cas d'échec un objet WP_Error
         $petPostIdOrError = wp_insert_post([
-            'ID' => $request['id'],
+            'id' => $request['id'],
             'post_type' => 'pet',
             'post_title' => strip_tags($petData['title']),
             'post_content' => strip_tags($petData['content']),
