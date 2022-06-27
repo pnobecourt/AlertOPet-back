@@ -152,7 +152,7 @@ class PetApi
                 'breed' => strip_tags($petMetaData[$petNumber]['breed']),
                 'identification' => strip_tags($petMetaData[$petNumber]['identification']),
                 'birth_date' => $petMetaData[$petNumber]['birth_date'],
-                'color' => strip_tags($petMetaData[$petNumber0]['color']),
+                'color' => strip_tags($petMetaData[$petNumber]['color']),
                 'size' => strip_tags($petMetaData[$petNumber]['size']),
                 'weight' => strip_tags($petMetaData[$petNumber]['weight']),
                 'picture' => $petPicture,
