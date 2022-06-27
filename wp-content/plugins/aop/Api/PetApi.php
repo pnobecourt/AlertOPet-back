@@ -120,7 +120,7 @@ class PetApi
 
         $petList = get_posts($query_args);
 
-        foreach ($petList as $pet){
+        foreach ($petList as $petNumber => $pet){
 
             $petId = $pet->ID;
 
@@ -142,19 +142,19 @@ class PetApi
                     $sql,
                 )
             );
-            $petPicture = $petPictures[0]->guid;
+            $petPicture = $petPictures[$petNumber]->guid;
 
-            $preparedData = [
+            $preparedData[] = [
                 'id' => $petPostData['ID'],
                 'title' => strip_tags($petPostData['post_title']),
                 'content' => strip_tags($petPostData['post_content']),
                 'species' => $petSpecies,
-                'breed' => strip_tags($petMetaData[0]['breed']),
-                'identification' => strip_tags($petMetaData[0]['identification']),
-                'birth_date' => $petMetaData[0]['birth_date'],
-                'color' => strip_tags($petMetaData[0]['color']),
-                'size' => strip_tags($petMetaData[0]['size']),
-                'weight' => strip_tags($petMetaData[0]['weight']),
+                'breed' => strip_tags($petMetaData[$petNumber]['breed']),
+                'identification' => strip_tags($petMetaData[$petNumber]['identification']),
+                'birth_date' => $petMetaData[$petNumber]['birth_date'],
+                'color' => strip_tags($petMetaData[$petNumber0]['color']),
+                'size' => strip_tags($petMetaData[$petNumber]['size']),
+                'weight' => strip_tags($petMetaData[$petNumber]['weight']),
                 'picture' => $petPicture,
                 'owner_id' => intval($petPostData['post_author']),
             ];
