@@ -53,10 +53,22 @@ class PetApi
             'post_status' => 'publish',
         ]);
 
-        // si on a reçu un int
+        // si on a reçu un int (que la creation de post a réussi), on ajoute les données de l'animal dans la base de données
         if (is_int($petPostIdOrError) && $petPostIdOrError > 0) {
+            // on ajoute les metas dans la table custom
             PetDatabase::CreatePetMetaData($petData, $petPostIdOrError);
-
+            /* // si des taxonomies sont assignées à un post on les ajoute
+            if(array_key_exists("terms", $petData)) {
+                foreach($petData["terms"] as $taxonomy => $terms) {
+                    wp_set_post_terms($petPostIdOrError, $terms, $taxonomy);
+                }
+            } */
+            if ($petData['species'] != null) {
+                //wp_set_post_terms($petPostIdOrError, $petData['species'], 'species');
+                // wp_set_post_terms ne fonctionne pas (parce que Pet est un CPT ?) du coup j'utilise wp_set_object_terms
+                wp_set_object_terms($petPostIdOrError, $petData['species'], 'species');
+            }
+            //
             $response = ["userId" => $petPostIdOrError];
         } else {
             // sinon c'est une erreur
@@ -184,11 +196,17 @@ class PetApi
             'post_status' => 'publish',
         ]);
 
-        // si on a reçu un int
-        if (is_int($petPostIdOrError)) {
-
-            PetDatabase::UpdatePetMetaDataByPetId($petData, $petPostIdOrError);
-
+        // si on a reçu un int (que la creation de post a réussi), on ajoute les données de l'animal dans la base de données
+        if (is_int($petPostIdOrError) && $petPostIdOrError > 0) {
+            // on ajoute les metas dans la table custom
+            PetDatabase::CreatePetMetaData($petData, $petPostIdOrError);
+            // si des taxonomies sont assignées à un post on les ajoute
+            if ($petData['species'] != null) {
+                //wp_set_post_terms($petPostIdOrError, $petData['species'], 'species');
+                // wp_set_post_terms ne fonctionne pas (parce que Pet est un CPT ?) du coup j'utilise wp_set_object_terms
+                wp_set_object_terms($petPostIdOrError, $petData['species'], 'species');
+            }
+            //
             $response = ["userId" => $petPostIdOrError];
         } else {
             // sinon c'est une erreur
@@ -205,8 +223,9 @@ class PetApi
 
         $deletePetMeta = PetDatabase::DeletePetMetaDataByPetId($request['id']);
 
+        
         if (is_int($deletePetMeta)) {
-
+            
             $response = wp_delete_post($petIdToDelete);
 
         } else {
@@ -216,6 +235,7 @@ class PetApi
         }
 
         // on renvoie la réponse au format JSON
+        //todo : envoyer un message d'erreur en cas d'échec de la suppression (actuellement renvoie l'id du post demandé même si celui-ci n'existe pas)
         return $response;
     }
 
