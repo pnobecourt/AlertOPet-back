@@ -2,7 +2,8 @@
     "require": {
         "johnpbloch/wordpress": "^6.0",
         "wpackagist-plugin/jwt-auth": "^2.1",
-        "wpackagist-plugin/fakerpress": "^0.5.3"
+        "wpackagist-plugin/fakerpress": "^0.5.3",
+        "wpackagist-plugin/classic-editor": "^1.6"
     },
     "config": {
         "allow-plugins": {

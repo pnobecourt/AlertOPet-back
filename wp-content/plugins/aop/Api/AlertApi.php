@@ -98,6 +98,12 @@ class AlertApi
         } else {
             $response->data['alert_status'] = null;
         }
+
+        if (!empty(get_the_terms($response->data['id'], 'alert_localization'))){
+            $response->data['alert_localization'] = get_the_terms($response->data['id'], 'alert_localization')[0]->slug;
+        } else {
+            $response->data['alert_localization'] = null;
+        }
         
         // get pet species
         if (!empty(get_the_terms($response->data['meta']['petId'], 'species'))){
