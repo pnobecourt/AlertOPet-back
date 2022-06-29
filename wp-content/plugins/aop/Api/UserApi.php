@@ -51,7 +51,7 @@ class UserApi {
             'last_name' => $postData['last_name'],
             'user_url' => $postData['user_url'],
             'description' => $postData['description'],
-            'show_admin_bar_front' => $postData['show_admin_bar_front'],
+            'show_admin_bar_front' => false,
             'role' => $postData['role'],
             'locale' => $postData['locale'],
             'meta_input' => [
@@ -105,28 +105,33 @@ class UserApi {
         // dans $postData on a un array associatif qui correspond à l'objet passé dans la requête ajax de userService.registerUser() côté VueJS
         // en cas de succès de wp_create_user() on récupère l'id de l'utilisateur créés
         // en cas d'échec un objet WP_Error
+        if ($request['id'] == 1) {
+            $adminBar = true;
+        } else {
+            $adminBar = false;
+        }
         $userIdOrErrorObject = wp_insert_user([
-            'id' => $request['id'],
-            'username' => $request['username'],
-            'user_login' => $request['user_login'],
-            'user_pass' => $request['user_pass'],
-            'user_nicename' => $request['user_nicename'],
-            'user_email' => $request['user_email'],
-            'display_name' => $request['display_name'],
-            'nickname' => $request['nickname'],
-            'first_name' => $request['first_name'],
-            'last_name' => $request['last_name'],
-            'user_url' => $request['user_url'],
-            'description' => $request['description'],
-            'show_admin_bar_front' => $request['show_admin_bar_front'],
-            'role' => $request['role'],
-            'locale' => $request['locale'],
+            'ID' => intval($request['id']),
+            'username' => $postData['username'],
+            'user_login' => $postData['user_login'],
+            'user_pass' => $postData['user_pass'],
+            'user_nicename' => $postData['user_nicename'],
+            'user_email' => $postData['user_email'],
+            'display_name' => $postData['display_name'],
+            'nickname' => $postData['nickname'],
+            'first_name' => $postData['first_name'],
+            'last_name' => $postData['last_name'],
+            'user_url' => $postData['user_url'],
+            'description' => $postData['description'],
+            'show_admin_bar_front' => $adminBar,
+            'role' => $postData['role'],
+            'locale' => $postData['locale'],
             'meta_input' => [
-                'country' => $request['country'],
-                'zip' => $request['zip'],
-                'city' => $request['city'],
-                'address' => $request['address'],
-                'phone' => $request['phone'],
+                'country' => $postData['country'],
+                'zip' => $postData['zip'],
+                'city' => $postData['city'],
+                'address' => $postData['address'],
+                'phone' => $postData['phone'],
             ]
         ]);
 
