@@ -11,6 +11,7 @@ use aop\PostType\AlertPostType;
 use aop\Taxonomy\SpeciesTaxonomy;
 use aop\Taxonomy\AlertTypeTaxonomy;
 use aop\Taxonomy\AlertStatusTaxonomy;
+use aop\Taxonomy\AlertLocalizationTaxonomy;
 
 class Plugin {
 
@@ -90,6 +91,7 @@ class Plugin {
         SpeciesTaxonomy::register();
         AlertTypeTaxonomy::register();
         AlertStatusTaxonomy::register();
+        AlertLocalizationTaxonomy::register();
 
         // register metas for custom post types
         AlertPostType::registerMetas();
@@ -119,6 +121,7 @@ class Plugin {
         SpeciesTaxonomy::addCaps();
         AlertTypeTaxonomy::addCaps();
         AlertStatusTaxonomy::addCaps();
+        AlertLocalizationTaxonomy::addCaps();
 
         // create the custom mysql tables
         Database::generatePetTable();
@@ -138,6 +141,7 @@ class Plugin {
         SpeciesTaxonomy::removeCaps();
         AlertTypeTaxonomy::removeCaps();
         AlertStatusTaxonomy::removeCaps();
+        AlertLocalizationTaxonomy::removeCaps();
     }
 
     public function onPluginUninstall()
