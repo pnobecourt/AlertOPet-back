@@ -1,0 +1,15 @@
+vendor
+wordpress
+wp-config.php
+wp-config.dev.php
+wp-config.prod.php
+
+/wp-content/*
+!/wp-content
+/wp-content/themes/*
+!/wp-content/themes
+/wp-content/plugins/*
+!/wp-content/plugins
+
+!/wp-content/themes/aop
+!/wp-content/plugins/aop
