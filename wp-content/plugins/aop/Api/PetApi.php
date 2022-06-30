@@ -189,7 +189,7 @@ class PetApi
         // en cas de succès de wp_create_user() on récupère l'id de l'utilisateur créés
         // en cas d'échec un objet WP_Error
         $petPostIdOrError = wp_insert_post([
-            'id' => $request['id'],
+            'ID' => $request['id'],
             'post_type' => 'pet',
             'post_title' => strip_tags($petData['title']),
             'post_content' => strip_tags($petData['content']),
