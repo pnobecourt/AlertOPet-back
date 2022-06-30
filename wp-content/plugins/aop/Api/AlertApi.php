@@ -108,9 +108,9 @@ class AlertApi
         // get pet species
         if (!empty(get_the_terms($response->data['meta']['petId'], 'species'))){
             $response->data['meta']['petSpecies'] = get_the_terms($response->data['meta']['petId'], 'species')[0]->name;
-        } else {
+        } /* else {
             $response->data['meta']['petSpecies'] = null;
-        }
+        } */
 
         // on est dans un filter, on doit donc retourner une valeur
         return $response;

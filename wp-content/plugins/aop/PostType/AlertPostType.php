@@ -93,6 +93,12 @@ class AlertPostType extends PostType {
             'single' => true,
             'show_in_rest' => true
         ]);
+        register_meta('post', 'petSpecies', [
+            'object_subtype' => 'alert',
+            'type' => 'string',            
+            'single' => true,
+            'show_in_rest' => true
+        ]);
         register_meta('post', 'petBreed', [
             'object_subtype' => 'alert',
             'type' => 'string',            
