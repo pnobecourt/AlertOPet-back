@@ -20,7 +20,7 @@ class AlertApi
         // au moment où WP prépare la réponse pour notre CPT Recipe, on ajoute des données qui nous intéressent
         add_filter("rest_prepare_{$postType}", [self::class, "onPrepare"], 10, 3);
         // we add a hook on the save_post_alert
-        add_action("save_post_{$postType}", [self::class, 'onSaveAlertPost'], 10, 3);
+        //add_action("save_post_{$postType}", [self::class, 'onSaveAlertPost'], 10, 3);
     }
 
     /**

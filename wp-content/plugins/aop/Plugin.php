@@ -66,6 +66,7 @@ class Plugin {
                 '/wp/v2/species',
                 '/wp/v2/alert_type',
                 '/wp/v2/alert_status',
+                '/wp/v2/alert_localization',
                 '/wp-json/aop/v1/user',
             ];
         
@@ -154,9 +155,9 @@ class Plugin {
     {
         header( 'Access-Control-Allow-Origin: *' );
         header( 'Access-Control-Allow-Methods: GET,POST,PUT,PATCH,DELETE,OPTIONS' );
-        header( 'Access-Control-Allow-Credentials: true' );
-        header( 'Access-Control-Allow-Headers: *' );
-        header( 'Access-Control-Max-Age: 3600' );
+        //header( 'Access-Control-Allow-Credentials: true' );
+        //header( 'Access-Control-Allow-Headers: *' );
+        //header( 'Access-Control-Max-Age: 3600' );
     }
 
 }
