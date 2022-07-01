@@ -2,13 +2,14 @@
 
 namespace aop\Taxonomy;
 
+use aop\PostType\AlertPostType;
 use aop\PostType\PetPostType;
 
 class SpeciesTaxonomy extends Taxonomy {
 
     const TAXONOMY_KEY = 'species';
     const TAXONOMY_NAME = 'Species';
-    const POST_TYPE_KEY = PetPostType::POST_TYPE_KEY;
+    const POST_TYPE_KEY = [PetPostType::POST_TYPE_KEY, AlertPostType::POST_TYPE_KEY];
 
      const CAPABILITIES =  [
         'manage_terms' => 'manage_species',
