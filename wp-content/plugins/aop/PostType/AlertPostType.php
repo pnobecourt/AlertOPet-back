@@ -65,11 +65,11 @@ class AlertPostType extends PostType {
             'edit_others_alerts' => false,
             'delete_others_alerts' => false,
             'create_private_alerts' => true,
-            'read_private_alerts' => false,
-            'edit_private_alerts' => false,
-            'delete_private_alerts' => false,
-            'edit_published_alerts' => false,
-            'delete_published_alerts' => false,
+            'read_private_alerts' => true,
+            'edit_private_alerts' => true,
+            'delete_private_alerts' => true,
+            'edit_published_alerts' => true,
+            'delete_published_alerts' => true,
         ],
     ];
 
