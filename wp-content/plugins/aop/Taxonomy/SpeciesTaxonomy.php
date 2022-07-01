@@ -24,6 +24,12 @@ class SpeciesTaxonomy extends Taxonomy {
             'edit_species' => true,
             'delete_species' => true,
             'assign_species' => true,
+        ],
+        'author' => [
+            'manage_species' => true,
+            'edit_species' => true,
+            'delete_species' => true,
+            'assign_species' => true,
         ]
     ];
 }
