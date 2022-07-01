@@ -12,7 +12,7 @@ class Taxonomy {
     {
         register_taxonomy(
             static::TAXONOMY_KEY,
-            [static::POST_TYPE_KEY],
+            static::POST_TYPE_KEY,
             [
                 'hierarchical' => true, // make it hierarchical (like categories)
                 'labels' => ['name' =>  static::TAXONOMY_NAME],
