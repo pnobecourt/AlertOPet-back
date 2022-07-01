@@ -23,6 +23,12 @@ class AlertLocalizationTaxonomy extends Taxonomy {
             'edit_alert_localization' => true,
             'delete_alert_localization' => true,
             'assign_alert_localization' => true,
+        ],
+        'author' => [
+            'manage_species' => true,
+            'edit_species' => true,
+            'delete_species' => true,
+            'assign_species' => true,
         ]
     ];
 }

@@ -23,6 +23,12 @@ class AlertStatusTaxonomy extends Taxonomy {
             'edit_alert_status' => true,
             'delete_alert_status' => true,
             'assign_alert_status' => true,
+        ],
+        'author' => [
+            'manage_species' => true,
+            'edit_species' => true,
+            'delete_species' => true,
+            'assign_species' => true,
         ]
     ];
 }
