@@ -101,6 +101,7 @@ class AlertApi
 
         if (!empty(get_the_terms($response->data['id'], 'alert_localization'))){
             $response->data['alert_localization'] = get_the_terms($response->data['id'], 'alert_localization')[0]->slug;
+            $response->data['alert_localization_name'] = get_the_terms($response->data['id'], 'alert_localization')[0]->name;
         } else {
             $response->data['alert_localization'] = null;
         }
